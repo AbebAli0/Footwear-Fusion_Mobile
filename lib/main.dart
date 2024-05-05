@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts package
+import 'theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,8 +38,8 @@ class MyHomePage extends StatelessWidget {
           children: <Widget>[
             Text(
               'Halo',
-              style: GoogleFonts.adamina(
-                textStyle: TextStyle(fontSize: 50), // Specify the font size
+              style: priceTextStyle.copyWith(
+                fontSize: 30,
               ),
             ),
           ],
