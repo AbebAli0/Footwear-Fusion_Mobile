@@ -5,13 +5,21 @@ class AppTheme {
   static bool isFocused = false;
   static _border([Color color = backgroundColor2]) => OutlineInputBorder(
         borderSide: BorderSide(color: color, width: 3),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
+      );
+  static _borderError([Color color = alertColor]) => OutlineInputBorder(
+        borderSide: BorderSide(color: color, width: 3),
+        borderRadius: BorderRadius.circular(12),
       );
   static final darkMode = ThemeData.dark().copyWith(
-    appBarTheme: const AppBarTheme(backgroundColor: backgroundColor1),
+    appBarTheme: const AppBarTheme(backgroundColor: backgroundColor2),
     scaffoldBackgroundColor: backgroundColor1,
-    inputDecorationTheme:
-        InputDecorationTheme(errorBorder: _border(alertColor), focusedBorder: _border(primaryColor), enabledBorder: _border()),
+    inputDecorationTheme: InputDecorationTheme(
+        fillColor: backgroundColor2,
+        filled: true,
+        errorBorder: _borderError(),
+        focusedBorder: _border(primaryColor),
+        enabledBorder: InputBorder.none),
   );
 }
 
