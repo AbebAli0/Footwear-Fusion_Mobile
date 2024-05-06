@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoes_store/theme.dart';
+import 'package:shoes_store/core/theme/theme.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class _SignInPageState extends State<SignInPage> {
                     'assets/icon_email.png',
                     width: 18,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 19,
                   ),
                   Expanded(
@@ -141,9 +141,7 @@ class _SignInPageState extends State<SignInPage> {
                       });
                     },
                     icon: Image.asset(
-                      _obscureText
-                          ? 'assets/icon_eye_closed.png'
-                          : 'assets/icon_eye_open.png',
+                      _obscureText ? 'assets/icon_eye_closed.png' : 'assets/icon_eye_open.png',
                       width: 24,
                       height: 24,
                       color: Colors.grey,
