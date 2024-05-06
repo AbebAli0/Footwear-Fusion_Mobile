@@ -13,7 +13,7 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     Timer(
       const Duration(seconds: 3), // Change the duration as needed
-      () => Navigator.pushReplacement(context, Routes.register()),
+      () => Navigator.pushReplacement(context, Routes.login()),
     );
   }
 
@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
                 'assets/splashscreen.png',
