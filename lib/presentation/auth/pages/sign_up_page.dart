@@ -18,6 +18,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
 
   final formKey = GlobalKey<FormState>();
 
@@ -57,23 +58,39 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   const SizedBox(height: 30),
                   const PaddingAuth(child: HeaderAuthField(title: 'Full Name')),
-                  AuthField(controller: fullNameController, hint: 'Your Full Name'),
+                  AuthField(
+                      prefixIcon: Image.asset('assets/auth/full_name_auth.png'),
+                      controller: fullNameController,
+                      hint: 'Your Full Name'),
                   const PaddingAuth(child: HeaderAuthField(title: 'Username')),
-                  AuthField(controller: usernameController, hint: 'Your Username'),
+                  AuthField(
+                      prefixIcon: Image.asset('assets/auth/username_auth.png'),
+                      controller: usernameController,
+                      hint: 'Your Username'),
                   const PaddingAuth(child: HeaderAuthField(title: 'Email Address')),
                   AuthField(
+                    prefixIcon: const Icon(Icons.email, color: primaryColor),
                     controller: emailController,
                     hint: 'Your Email Address',
                     inputType: TextInputType.emailAddress,
                   ),
                   const PaddingAuth(child: HeaderAuthField(title: 'Password')),
                   AuthField(
-                    controller: passwordController,
-                    hint: 'Your Password',
-                    obscureText: true,
-                  ),
+                      prefixIcon: Image.asset('assets/icon_password.png', width: 18),
+                      controller: passwordController,
+                      hint: 'Your Password',
+                      obscureText: _obscureText,
+                      suffixIcon: IconButton(
+                        onPressed: () => setState(() => _obscureText = !_obscureText),
+                        icon: Image.asset(
+                          _obscureText ? 'assets/icon_eye_closed.png' : 'assets/icon_eye_open.png',
+                          width: 24,
+                          height: 24,
+                          color: Colors.grey,
+                        ),
+                      )),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    padding: const EdgeInsets.only(top: 30, bottom: 90),
                     child: Container(
                       decoration: BoxDecoration(color: primaryColor, borderRadius: BorderRadius.circular(12)),
                       child: ElevatedButton(
