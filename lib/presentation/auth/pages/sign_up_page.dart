@@ -66,23 +66,28 @@ class _SignUpPageState extends State<SignUpPage> {
                     prefixIcon: Image.asset('assets/auth/username_auth.png'),
                     controller: usernameController,
                     hint: 'Your Username'),
-                const PaddingAuth(child: HeaderAuthField(title: 'Email Address')),
+                const PaddingAuth(
+                    child: HeaderAuthField(title: 'Email Address')),
                 AuthField(
-                  prefixIcon: const Icon(Icons.email, color: primaryColor),
+                  prefixIcon: Image.asset('assets/icon_email.png', width: 18),
                   controller: emailController,
                   hint: 'Your Email Address',
                   inputType: TextInputType.emailAddress,
                 ),
                 const PaddingAuth(child: HeaderAuthField(title: 'Password')),
                 AuthField(
-                    prefixIcon: Image.asset('assets/icon_password.png', width: 18),
+                    prefixIcon:
+                        Image.asset('assets/icon_password.png', width: 18),
                     controller: passwordController,
                     hint: 'Your Password',
                     obscureText: _obscureText,
                     suffixIcon: IconButton(
-                      onPressed: () => setState(() => _obscureText = !_obscureText),
+                      onPressed: () =>
+                          setState(() => _obscureText = !_obscureText),
                       icon: Image.asset(
-                        _obscureText ? 'assets/icon_eye_closed.png' : 'assets/icon_eye_open.png',
+                        _obscureText
+                            ? 'assets/icon_eye_closed.png'
+                            : 'assets/icon_eye_open.png',
                         width: 24,
                         height: 24,
                         color: Colors.grey,
@@ -91,12 +96,15 @@ class _SignUpPageState extends State<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 30, bottom: 90),
                   child: Container(
-                    decoration: BoxDecoration(color: primaryColor, borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(12)),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
-                            fixedSize: Size(MediaQuery.of(context).size.width, 50)),
+                            fixedSize:
+                                Size(MediaQuery.of(context).size.width, 50)),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             //TODO: Methodmu deleh kene
@@ -104,7 +112,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                         child: Text(
                           'Sign Up',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: Colors.white),
                         )),
                   ),
                 ),
@@ -112,15 +123,22 @@ class _SignUpPageState extends State<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Already have account? ',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: secondaryTextColor.withOpacity(.5))),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                color: secondaryTextColor.withOpacity(.5))),
                     const SizedBox(width: 5),
                     GestureDetector(
-                      onTap: () => Navigator.pushReplacement(context, Routes.login()),
+                      onTap: () =>
+                          Navigator.pushReplacement(context, Routes.login()),
                       child: Text('Sign In',
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
-                              ?.copyWith(color: primaryColor, fontWeight: FontWeight.bold)),
+                              ?.copyWith(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
