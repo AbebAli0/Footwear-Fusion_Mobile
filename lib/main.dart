@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoes_store/pages/sign_in_pages.dart';
+import 'package:shoes_store/pages/sign_in_page.dart';
 import 'package:shoes_store/pages/splash_page.dart';
 
 void main() => runApp(MyApp());

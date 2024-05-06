@@ -11,8 +11,8 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Timer(
-      Duration(seconds: 3),
-      () => Navigator.pushNamed(context, '/sign-in'),
+      Duration(seconds: 3), // Change the duration as needed
+      () => Navigator.pushReplacementNamed(context, '/sign-in'),
     );
   }
 
@@ -21,13 +21,14 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: Center(
         child: Container(
-          width: 400,
-          height: 1000,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
-                  'assets/splashscreen.png'), // Sesuaikan nama dan ekstensi file dengan yang ada di pubspec.yaml
-              fit: BoxFit.cover, // Sesuaikan sesuai kebutuhan tampilan gambar
+                'assets/splashscreen.png',
+              ),
+              fit: BoxFit.cover,
             ),
           ),
         ),
