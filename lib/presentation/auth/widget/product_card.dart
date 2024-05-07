@@ -26,7 +26,7 @@ class ProductCard extends StatelessWidget {
             'assets/image_shoes.png',
             width: 215,
             height: 150,
-            // fit: BoxFit.cover,
+            fit: BoxFit.cover,
           ),
           Container(
             margin: EdgeInsets.symmetric(

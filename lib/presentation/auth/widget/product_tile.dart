@@ -19,9 +19,9 @@ class ProductTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               'assets/image_shoes.png',
-              width: 180,
-              height: 180,
-              // fit: BoxFit.cover,
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(
