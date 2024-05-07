@@ -38,6 +38,8 @@ const Color backgroundColor4 = Color(0xff252836);
 const Color primaryTextColor = Color(0xffF1F0F2);
 const Color secondaryTextColor = Color(0xff999999);
 const Color subtitleColor = Color(0xff504F5E);
+const Color transparentColor = Colors.transparent;
+const blackColor = Color(0xff2E2E2E);
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(
   color: primaryTextColor,
@@ -53,6 +55,10 @@ TextStyle subtitleTextStyle = GoogleFonts.poppins(
 
 TextStyle priceTextStyle = GoogleFonts.poppins(
   color: priceColor,
+);
+
+TextStyle blackTextStyle = GoogleFonts.poppins(
+  color: blackColor,
 );
 
 FontWeight light = FontWeight.w300;
