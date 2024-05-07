@@ -34,6 +34,7 @@ const Color priceColor = Color(0xff2C96F1);
 const Color backgroundColor1 = Color(0xff1F1D2B);
 const Color backgroundColor2 = Color(0xff2B2937);
 const Color backgroundColor3 = Color(0xff242231);
+const Color backgroundColor4 = Color(0xff252836);
 const Color primaryTextColor = Color(0xffF1F0F2);
 const Color secondaryTextColor = Color(0xff999999);
 const Color subtitleColor = Color(0xff504F5E);

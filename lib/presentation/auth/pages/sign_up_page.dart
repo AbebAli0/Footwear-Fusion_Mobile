@@ -69,7 +69,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 const PaddingAuth(
                     child: HeaderAuthField(title: 'Email Address')),
                 AuthField(
-                  prefixIcon: Image.asset('assets/icon_email.png', width: 18),
+                  prefixIcon: Image.asset(
+                    'assets/icon_email.png',
+                    width: 18,
+                  ),
                   controller: emailController,
                   hint: 'Your Email Address',
                   inputType: TextInputType.emailAddress,
@@ -107,6 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 Size(MediaQuery.of(context).size.width, 50)),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
+                            Navigator.pushReplacement(context, Routes.main());
                             //TODO: Methodmu deleh kene
                           }
                         },

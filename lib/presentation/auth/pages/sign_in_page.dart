@@ -93,6 +93,7 @@ class _SignInPageState extends State<SignInPage> {
                                 Size(MediaQuery.of(context).size.width, 50)),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
+                            Navigator.pushReplacement(context, Routes.main());
                             //TODO: Methodmu deleh kene
                           }
                         },
