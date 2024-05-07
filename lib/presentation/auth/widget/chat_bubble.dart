@@ -1,12 +1,20 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shoes_store/core/theme/theme.dart';
 
 class ChatBubble extends StatelessWidget {
   final String text;
   final bool isSender;
+  final bool hasProduct;
 
-  ChatBubble({this.isSender = false, this.text = ''});
+  ChatBubble({
+    this.isSender = false,
+    this.text = '',
+    this.hasProduct = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +76,38 @@ class ChatBubble extends StatelessWidget {
                 OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: primaryColor,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      )),
+                    side: BorderSide(
+                      color: primaryColor,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                  ),
                   child: Text(
                     'Add to Cart',
-                    style: primaryTextStyle,
+                    style: priceTextStyle,
+                  ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    'Buy Now',
+                    style: GoogleFonts.poppins(
+                      color: backgroundColor5,
+                      fontWeight: medium,
+                    ),
                   ),
                 ),
               ],
@@ -93,10 +124,11 @@ class ChatBubble extends StatelessWidget {
         crossAxisAlignment:
             isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          productPreview(),
+          hasProduct ? productPreview() : SizedBox(),
           Row(
             mainAxisAlignment:
                 isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
                 child: Container(
