@@ -36,6 +36,7 @@ const Color backgroundColor2 = Color(0xff2B2937);
 const Color backgroundColor3 = Color(0xff242231);
 const Color backgroundColor4 = Color(0xff252836);
 const Color backgroundColor5 = Color(0xff2B2844);
+const Color backgroundColor6 = Color(0xffECEDEF);
 const Color primaryTextColor = Color(0xffF1F0F2);
 const Color secondaryTextColor = Color(0xff999999);
 const Color subtitleColor = Color(0xff504F5E);

@@ -2,10 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:shoes_store/core/theme/theme.dart';
+import 'package:shoes_store/presentation/auth/pages/cart_page.dart';
 import 'package:shoes_store/presentation/auth/pages/chat_page.dart';
 import 'package:shoes_store/presentation/auth/pages/home_page.dart';
 import 'package:shoes_store/presentation/auth/pages/wishlist_page.dart';
 import 'package:shoes_store/presentation/auth/pages/profile_page.dart';
+
+import 'package:shoes_store/presentation/routes/app_pages.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,7 +24,9 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     Widget cartButton() {
       return FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushReplacement(context, Routes.cart());
+        },
         backgroundColor: secondaryColor,
         child: Image.asset(
           'assets/icon_cart.png',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shoes_store/core/theme/theme.dart';
 import 'package:shoes_store/presentation/auth/widget/chat_bubble.dart';
+import 'package:shoes_store/presentation/routes/app_pages.dart';
 
 class DetailChatPage extends StatelessWidget {
   const DetailChatPage({super.key});
@@ -41,6 +42,19 @@ class DetailChatPage extends StatelessWidget {
                     ),
                   )
                 ],
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context, Routes.chatpage());
+                },
+                icon: Image.asset(
+                  'assets/icon_close.png',
+                  width: 24, // Sesuaikan lebar sesuai kebutuhan
+                  height: 24, // Sesuaikan tinggi sesuai kebutuhan
+                ),
               ),
             ],
           ),
