@@ -168,7 +168,7 @@ class _ProductPageState extends State<ProductPage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.pushReplacement(context, Routes.main());
+                    Navigator.pushReplacement(context, Routes.cart());
                   },
                   icon: Image.asset(
                     'assets/icon_bag.png',
@@ -353,7 +353,7 @@ class _ProductPageState extends State<ProductPage> {
                 ],
               ),
             ),
-// Note: Familiar Shoes
+            // Note: Familiar Shoes
             Container(
               width: double.infinity,
               margin: EdgeInsets.only(
