@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shoes_store/presentation/auth/pages/cart_page.dart';
+import 'package:shoes_store/presentation/auth/pages/checkout_page.dart';
+import 'package:shoes_store/presentation/auth/pages/checkout_success_page.dart';
 import 'package:shoes_store/presentation/auth/pages/product_page.dart';
 import 'package:shoes_store/presentation/auth/pages/profile_page.dart';
 
@@ -25,4 +27,7 @@ class Routes {
       MaterialPageRoute(builder: (context) => const ProfilePage());
   static product() => MaterialPageRoute(builder: (context) => ProductPage());
   static cart() => MaterialPageRoute(builder: (context) => CartPage());
+  static checkout() => MaterialPageRoute(builder: (context) => CheckoutPage());
+  static checkoutsuccess() =>
+      MaterialPageRoute(builder: (context) => CheckoutSuccessPage());
 }

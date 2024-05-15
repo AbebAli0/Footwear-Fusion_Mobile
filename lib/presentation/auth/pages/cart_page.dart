@@ -129,7 +129,9 @@ class CartPage extends StatelessWidget {
                 horizontal: defaultMargin,
               ),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(context, Routes.checkout());
+                },
                 style: TextButton.styleFrom(
                     backgroundColor: primaryColor,
                     padding: EdgeInsets.symmetric(

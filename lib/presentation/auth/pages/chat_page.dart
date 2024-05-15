@@ -38,7 +38,7 @@ class ChatPage extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                'Oops no message yet?',
+                'Belum Ada Pesan?',
                 style: primaryTextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: medium,
@@ -48,7 +48,7 @@ class ChatPage extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'You have never done a transaction.',
+                'Kamu Belum Pernah Melakukan Transaksi.',
                 style: secondaryTextStyle,
               ),
               SizedBox(
