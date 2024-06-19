@@ -48,7 +48,7 @@ class DetailChatPage extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context, Routes.chatpage());
+                  Navigator.pushReplacement(context, Routes.main());
                 },
                 icon: Image.asset(
                   'assets/icon_close.png',

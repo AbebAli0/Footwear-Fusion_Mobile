@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shoes_store/core/theme/theme.dart';
+import 'package:shoes_store/presentation/auth/pages/PurchaseHistoryPage.dart';
 
 import '../../routes/app_pages.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final String username;
+  const ProfilePage({Key? key, required this.username}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -34,14 +36,14 @@ class ProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Halo, Michael',
+                        'Halo, $username',
                         style: primaryTextStyle.copyWith(
                           fontSize: 24,
                           fontWeight: semiBold,
                         ),
                       ),
                       Text(
-                        '@iqbalmaulana',
+                        '@$username',
                         style: subtitleTextStyle.copyWith(
                           fontSize: 16,
                         ),
@@ -122,8 +124,17 @@ class ProfilePage extends StatelessWidget {
                   'Edit Profile',
                 ),
               ),
-              menuItem(
-                'Your Orders',
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PurchaseHistoryPage()),
+                  );
+                },
+                child: menuItem(
+                  'Your Orders',
+                ),
               ),
               menuItem(
                 'Help',

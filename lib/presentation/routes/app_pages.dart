@@ -20,12 +20,10 @@ class Routes {
   static main() => MaterialPageRoute(builder: (context) => const MainPage());
   static chat() =>
       MaterialPageRoute(builder: (context) => const DetailChatPage());
-  static chatpage() =>
-      MaterialPageRoute(builder: (context) => const ChatPage());
   static edit() => MaterialPageRoute(builder: (context) => EditProfilePage());
-  static profile() =>
-      MaterialPageRoute(builder: (context) => const ProfilePage());
-  static product() => MaterialPageRoute(builder: (context) => ProductPage());
+  static profile(String username) =>
+      MaterialPageRoute(builder: (context) => ProfilePage(username: username));
+  // static product(String id_product) => MaterialPageRoute(builder: (context) => ProductPage(id_product: id_product));
   static cart() => MaterialPageRoute(builder: (context) => CartPage());
   static checkout() => MaterialPageRoute(builder: (context) => CheckoutPage());
   static checkoutsuccess() =>

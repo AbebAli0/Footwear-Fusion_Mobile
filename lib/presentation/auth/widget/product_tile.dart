@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shoes_store/core/theme/theme.dart';
-import 'package:shoes_store/presentation/routes/app_pages.dart';
+import 'package:shoes_store/presentation/auth/pages/constants.dart';
+import 'package:shoes_store/presentation/auth/pages/product_page.dart';
 
 class ProductTile extends StatelessWidget {
-  const ProductTile({super.key});
+  final int idProduct;
+  final String username;
+  final String image;
+  final String price;
+
+  const ProductTile({
+    Key? key,
+    required this.username,
+    required this.idProduct,
+    required this.image,
+    required this.price,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacement(context, Routes.product());
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(idProduct: idProduct),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -22,11 +39,13 @@ class ProductTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/image_shoes.png',
+              child: CachedNetworkImage(
+                imageUrl: '${Constants.baseUrl}$image', // Update the URL to your image
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
             SizedBox(
@@ -36,17 +55,11 @@ class ProductTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Football',
-                    style: secondaryTextStyle.copyWith(
-                      fontSize: 12,
-                    ),
-                  ),
                   SizedBox(
                     height: 6,
                   ),
                   Text(
-                    'Predator 20.3 Firm Ground',
+                    username,
                     style: primaryTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -56,11 +69,11 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Rp. 1.999.000',
+                    'Rp.$price',
                     style: priceTextStyle.copyWith(
                       fontWeight: medium,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

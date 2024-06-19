@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shoes_store/core/theme/theme.dart';
-
-import '../../routes/app_pages.dart';
+import 'package:shoes_store/presentation/auth/pages/constants.dart';
 import 'package:shoes_store/presentation/auth/pages/product_page.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final int idProduct;
+  final String username;
+  final String image;
+  final String price;
+
+  const ProductCard({
+    Key? key,
+    required this.username,
+    required this.idProduct,
+    required this.image,
+    required this.price,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
-          Routes.product(),
+          MaterialPageRoute(
+            builder: (context) => ProductPage(idProduct: idProduct),
+          ),
         );
       },
       child: Container(
@@ -32,11 +45,13 @@ class ProductCard extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            Image.asset(
-              'assets/image_shoes.png',
+            CachedNetworkImage(
+              imageUrl: '${Constants.baseUrl}$image',
               width: 215,
               height: 150,
               fit: BoxFit.cover,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
             Container(
               margin: EdgeInsets.symmetric(
@@ -45,17 +60,11 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Hiking',
-                    style: secondaryTextStyle.copyWith(
-                      fontSize: 12,
-                    ),
-                  ),
                   SizedBox(
                     height: 6,
                   ),
                   Text(
-                    'COURT VISION 2.0',
+                    username,
                     style: blackTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: semiBold,
@@ -66,7 +75,7 @@ class ProductCard extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Rp. 1.499.000',
+                    'Rp.$price',
                     style: priceTextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: medium,

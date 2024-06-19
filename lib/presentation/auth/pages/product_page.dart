@@ -1,33 +1,125 @@
+import 'dart:ffi';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shoes_store/core/theme/theme.dart';
+import 'package:shoes_store/presentation/auth/pages/config.dart';
+import 'package:shoes_store/presentation/auth/pages/constants.dart';
 import 'package:shoes_store/presentation/routes/app_pages.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({Key? key});
+  final int idProduct;
+
+  ProductPage({required this.idProduct});
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
+  _ProductPageState createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
-  final List<String> images = const [
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
+  Map<String, dynamic>? product;
+  bool _isMounted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isMounted = true;
+    fetchAndPrintProduct(widget.idProduct);
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
+  }
+
+  Future<void> _addToCart(BuildContext context) async {
+    // Ambil ID user dari SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('userId');
+    // print(product?['id']);
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('User ID not found. Please login first.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    final response = await http.post(
+      Uri.parse('${Config.baseUrl}/api/carts'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'customer_id': userId,
+        'product_id': product?['id'], // Asumsikan `product` memiliki `id`
+        'quantity': 1, // Anda bisa menggantinya dengan quantity yang dipilih
+      }),
+    );
+    // print(userId);
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Product added to cart!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to add product to cart.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<void> fetchAndPrintProduct(int id) async {
+    try {
+      final response =
+          await http.get(Uri.parse('${Constants.baseUrl}api/products/$id'));
+
+      if (response.statusCode == 200 && _isMounted) {
+        final jsonResponse = json.decode(response.body);
+        print(jsonResponse.toString()); // Print raw data from API
+
+        // Check if the response is a map with product details
+        if (jsonResponse is Map<String, dynamic>) {
+          if (_isMounted) {
+            setState(() {
+              product = jsonResponse;
+            });
+          }
+        } else {
+          throw Exception('Unexpected response format');
+        }
+      } else {
+        if (_isMounted) {
+          print('Failed to load product: ${response.statusCode}');
+          throw Exception('Failed to load product: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      if (_isMounted) {
+        print('Error fetching product: $e');
+        throw Exception('Failed to load product: $e');
+      }
+    }
+  }
+
+  final List<String> images = [
     'assets/image_shoes2.png',
   ];
 
   List familiarShoes = [
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
-    'assets/image_shoes2.png',
     'assets/image_shoes2.png',
   ];
 
@@ -164,6 +256,8 @@ class _ProductPageState extends State<ProductPage> {
                   },
                   icon: Image.asset(
                     'assets/icon_back.png',
+                    width: 22,
+                    color: Colors.black,
                   ),
                 ),
                 IconButton(
@@ -178,16 +272,14 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
           CarouselSlider(
-            items: images
-                .map(
-                  (image) => Image.asset(
-                    image,
-                    width: MediaQuery.of(context).size.width,
-                    height: 310,
-                    fit: BoxFit.cover,
-                  ),
-                )
-                .toList(),
+            items: [
+              Image.network(
+                '${Constants.baseUrl}' + product!['thumb_image'],
+                width: MediaQuery.of(context).size.width,
+                height: 310,
+                fit: BoxFit.cover,
+              ),
+            ],
             options: CarouselOptions(
               initialPage: 0,
               onPageChanged: (index, reason) {
@@ -212,7 +304,9 @@ class _ProductPageState extends State<ProductPage> {
     }
 
     Widget content() {
-      int index = -1;
+      if (product == null) {
+        return Center(child: CircularProgressIndicator());
+      }
 
       return Container(
         width: double.infinity,
@@ -239,16 +333,10 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'TERREX URBAN LOW',
+                          product!['name'],
                           style: primaryTextStyle.copyWith(
                             fontSize: 18,
                             fontWeight: semiBold,
-                          ),
-                        ),
-                        Text(
-                          'Hiking',
-                          style: secondaryTextStyle.copyWith(
-                            fontSize: 12,
                           ),
                         ),
                       ],
@@ -314,7 +402,7 @@ class _ProductPageState extends State<ProductPage> {
                     style: primaryTextStyle,
                   ),
                   Text(
-                    'Rp. 1.999.999',
+                    'Rp. ${product!['price']}',
                     style: priceTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -344,7 +432,7 @@ class _ProductPageState extends State<ProductPage> {
                     height: 12,
                   ),
                   Text(
-                    'Jalan yang tidak beraspal dan permukaan yang tercampur aduk sangat mudah Bila anda memiliki traksi dan mendukung anda Kebutuhan. Cukup santai untuk perjalanan sehari-hari.',
+                    product!['long_description'],
                     style: subtitleTextStyle.copyWith(
                       fontWeight: light,
                     ),
@@ -380,10 +468,11 @@ class _ProductPageState extends State<ProductPage> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: familiarShoes.map((image) {
-                        index++;
                         return Container(
                           margin: EdgeInsets.only(
-                            left: index == 0 ? defaultMargin : 0,
+                            left: image == familiarShoes.first
+                                ? defaultMargin
+                                : 0,
                           ),
                           child: familiarShoesCard(image),
                         );
@@ -424,7 +513,7 @@ class _ProductPageState extends State<ProductPage> {
                       height: 54,
                       child: TextButton(
                         onPressed: () {
-                          showSuccessDialog();
+                          _addToCart(context);
                         },
                         style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -452,12 +541,14 @@ class _ProductPageState extends State<ProductPage> {
 
     return Scaffold(
       backgroundColor: backgroundColor6,
-      body: ListView(
-        children: [
-          header(),
-          content(),
-        ],
-      ),
+      body: product == null
+          ? Center(child: CircularProgressIndicator())
+          : ListView(
+              children: [
+                header(),
+                content(),
+              ],
+            ),
     );
   }
 }

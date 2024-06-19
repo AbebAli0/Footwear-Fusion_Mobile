@@ -1,20 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:shoes_store/core/theme/theme.dart';
+import 'package:shoes_store/presentation/auth/pages/constants.dart';
 import 'package:shoes_store/presentation/auth/widget/product_card.dart';
 import 'package:shoes_store/presentation/auth/widget/product_tile.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  final String username;
+  const HomePage({Key? key, required this.username}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Map<String, dynamic>> products = [];
+  String errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    try {
+      final response =
+          await http.get(Uri.parse('${Constants.baseUrl}api/products'));
+
+      if (!mounted) return; // Check if the widget is still mounted
+
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        setState(() {
+          products = jsonResponse.cast<Map<String, dynamic>>();
+        });
+      } else {
+        setState(() {
+          errorMessage = 'Failed to load products: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return; // Check if the widget is still mounted
+      setState(() {
+        errorMessage = 'Failed to load products: $e';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget header() {
       return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
+        padding: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.symmetric(horizontal: defaultMargin),
         child: Row(
           children: [
             Expanded(
@@ -22,14 +64,14 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Halo, Michael',
+                    'Halo, ${widget.username}',
                     style: primaryTextStyle.copyWith(
                       fontSize: 24,
                       fontWeight: semiBold,
                     ),
                   ),
                   Text(
-                    '@iqbalmaulana',
+                    '@${widget.username}',
                     style: subtitleTextStyle.copyWith(
                       fontSize: 16,
                     ),
@@ -56,24 +98,15 @@ class HomePage extends StatelessWidget {
 
     Widget categories() {
       return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-        ),
+        margin: EdgeInsets.only(top: defaultMargin),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              SizedBox(
-                width: defaultMargin,
-              ),
+              SizedBox(width: defaultMargin),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
-                ),
-                margin: EdgeInsets.only(
-                  right: 16,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                margin: EdgeInsets.only(right: 16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: primaryColor,
@@ -86,98 +119,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
-                ),
-                margin: EdgeInsets.only(
-                  right: 16,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: subtitleColor,
-                  ),
-                  color: transparentColor,
-                ),
-                child: Text(
-                  'Running',
-                  style: subtitleTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
-                ),
-                margin: EdgeInsets.only(
-                  right: 16,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: subtitleColor,
-                  ),
-                  color: transparentColor,
-                ),
-                child: Text(
-                  'Training',
-                  style: subtitleTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
-                ),
-                margin: EdgeInsets.only(
-                  right: 16,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: subtitleColor,
-                  ),
-                  color: transparentColor,
-                ),
-                child: Text(
-                  'Basketball',
-                  style: subtitleTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
-                ),
-                margin: EdgeInsets.only(
-                  right: 16,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: subtitleColor,
-                  ),
-                  color: transparentColor,
-                ),
-                child: Text(
-                  'Hiking',
-                  style: subtitleTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                ),
-              ),
+              // Add other categories here
             ],
           ),
         ),
@@ -186,11 +128,8 @@ class HomePage extends StatelessWidget {
 
     Widget popularProductsTitle() {
       return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
+        padding: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.symmetric(horizontal: defaultMargin),
         child: Text(
           'Popular Products',
           style: primaryTextStyle.copyWith(
@@ -203,22 +142,21 @@ class HomePage extends StatelessWidget {
 
     Widget popularProducts() {
       return Container(
-        margin: EdgeInsets.only(
-          top: 14,
-        ),
+        margin: EdgeInsets.only(top: 14),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              SizedBox(
-                width: defaultMargin,
-              ),
+              SizedBox(width: defaultMargin),
               Row(
-                children: [
-                  ProductCard(),
-                  ProductCard(),
-                  ProductCard(),
-                ],
+                children: products.map((product) {
+                  return ProductCard(
+                    idProduct: product['id'],
+                    username: product['name'],
+                    image: product['thumb_image'],
+                    price: product['price'] != null ? '${product['price']}' : '',
+                  );
+                }).toList(),
               ),
             ],
           ),
@@ -228,11 +166,8 @@ class HomePage extends StatelessWidget {
 
     Widget newArrivalsTitle() {
       return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
+        padding: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.symmetric(horizontal: defaultMargin),
         child: Text(
           'New Arrivals',
           style: primaryTextStyle.copyWith(
@@ -244,19 +179,25 @@ class HomePage extends StatelessWidget {
     }
 
     Widget newArrivals() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: 14,
-        ),
-        child: Column(
-          children: [
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-          ],
-        ),
-      );
+      if (errorMessage.isNotEmpty) {
+        return Center(
+          child: Text(errorMessage, style: TextStyle(color: Colors.red)),
+        );
+      } else {
+        return Container(
+          margin: EdgeInsets.only(top: 14),
+          child: Column(
+            children: products.map((product) {
+              return ProductTile(
+                idProduct: product['id'],
+                username: product['name'],
+                image: product['thumb_image'],
+                price: product['price'] != null ? '${product['price']}' : '',
+              );
+            }).toList(),
+          ),
+        );
+      }
     }
 
     return ListView(

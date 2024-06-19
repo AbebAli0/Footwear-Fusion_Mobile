@@ -1,6 +1,5 @@
-// import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoes_store/core/theme/theme.dart';
 import 'package:shoes_store/presentation/auth/pages/cart_page.dart';
 import 'package:shoes_store/presentation/auth/pages/chat_page.dart';
@@ -19,13 +18,31 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
+  String token = "";
+  String email = "";
+  String username = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      token = prefs.getString('token') ?? "";
+      email = prefs.getString('email') ?? "";
+      username = prefs.getString('username') ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget cartButton() {
       return FloatingActionButton(
         onPressed: () {
-          Navigator.pushReplacement(context, Routes.cart());
+          Navigator.push(context, Routes.cart());
         },
         backgroundColor: secondaryColor,
         child: Image.asset(
@@ -71,32 +88,32 @@ class _MainPageState extends State<MainPage> {
                 ),
                 label: '',
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: EdgeInsets.only(
-                    right: 40,
-                  ),
-                  child: Image.asset(
-                    'assets/icon_chat.png',
-                    width: 20,
-                    color: currentIndex == 1 ? primaryColor : Color(0xff808191),
-                  ),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: EdgeInsets.only(
-                    left: 40,
-                  ),
-                  child: Image.asset(
-                    'assets/icon_wishlist.png',
-                    width: 20,
-                    color: currentIndex == 2 ? primaryColor : Color(0xff808191),
-                  ),
-                ),
-                label: '',
-              ),
+              // BottomNavigationBarItem(
+              //   icon: Container(
+              //     margin: EdgeInsets.only(
+              //       right: 40,
+              //     ),
+              //     child: Image.asset(
+              //       'assets/icon_chat.png',
+              //       width: 20,
+              //       color: currentIndex == 1 ? primaryColor : Color(0xff808191),
+              //     ),
+              //   ),
+              //   label: '',
+              // ),
+              // BottomNavigationBarItem(
+              //   icon: Container(
+              //     margin: EdgeInsets.only(
+              //       left: 40,
+              //     ),
+              //     child: Image.asset(
+              //       'assets/icon_wishlist.png',
+              //       width: 20,
+              //       color: currentIndex == 2 ? primaryColor : Color(0xff808191),
+              //     ),
+              //   ),
+              //   label: '',
+              // ),
               BottomNavigationBarItem(
                 icon: Container(
                   margin: EdgeInsets.only(
@@ -122,11 +139,15 @@ class _MainPageState extends State<MainPage> {
           Expanded(
             child: IndexedStack(
               index: currentIndex,
-              children: const [
-                HomePage(),
-                ChatPage(),
-                WishlistPage(),
-                ProfilePage(),
+              children: [
+                HomePage(
+                    key: UniqueKey(),
+                    username: username), // Menghapus kata kunci const
+                // ChatPage(key: UniqueKey()), // Menghapus kata kunci const
+                // WishlistPage(key: UniqueKey()), // Menghapus kata kunci const
+                ProfilePage(
+                    key: UniqueKey(),
+                    username: username), // Menghapus kata kunci const
               ],
             ),
           ),

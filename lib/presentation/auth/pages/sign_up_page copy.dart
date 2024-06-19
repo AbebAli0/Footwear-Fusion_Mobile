@@ -1,13 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shoes_store/presentation/auth/pages/constants.dart';
+import 'package:provider/provider.dart'; // Import Provider package
 import 'package:shoes_store/presentation/auth/widget/auth_field_widget.dart';
 import 'package:shoes_store/presentation/auth/widget/header_auth_field.dart';
 import 'package:shoes_store/presentation/auth/widget/padding_auth_field.dart';
+import 'package:shoes_store/providers/auth_provider.dart';
+
 import '../../../core/theme/theme.dart';
 import '../../routes/app_pages.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -32,54 +31,6 @@ class _SignUpPageState extends State<SignUpPage> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  void _showSnackbar(String message, Color backgroundColor) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: backgroundColor,
-      duration: Duration(seconds: 3),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  Future<void> handleSignUp(BuildContext context) async {
-    final response = await http.post(
-      Uri.parse(
-          '${Constants.baseUrl}api/register'), // Ganti dengan URL API Anda
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'name': fullNameController.text,
-        'username': usernameController.text,
-        'email': emailController.text,
-        'password': passwordController.text,
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-      final String token = responseData['token'];
-      final Map<String, dynamic> user = responseData['user'];
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-      await prefs.setString('email', user['email']);
-      await prefs.setString('username', user['username']);
-      await prefs.setInt('userId', user['id']);
-      
-      _showSnackbar('Sign up successful!', Colors.green);
-      Navigator.pushReplacement(context, Routes.main());
-    } else {
-      final Map<String, dynamic> responseJson = jsonDecode(response.body);
-      if (responseJson.containsKey('message')) {
-        _showSnackbar(responseJson['message'],
-            Colors.red); // Menampilkan pesan kesalahan dari server
-      } else {
-        _showSnackbar('Sign up failed: Unknown error', Colors.red);
-      }
-    }
   }
 
   @override
@@ -205,5 +156,21 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  // Function to handle sign-up
+  Future<void> handleSignUp(BuildContext context) async {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context,
+        listen: false); // Get the AuthProvider instance
+    bool signUpSuccess = await authProvider.register(
+      name: fullNameController.text,
+      username: usernameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+    );
+    if (signUpSuccess) {
+      Navigator.pushReplacement(context,
+          Routes.main()); // Navigate to main page on successful sign-up
+    }
   }
 }

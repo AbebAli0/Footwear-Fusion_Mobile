@@ -14,7 +14,7 @@ class EditProfilePage extends StatelessWidget {
         leading: IconButton(
           icon: Image.asset('assets/icon_close.png'),
           onPressed: () {
-            Navigator.pushReplacement(context, Routes.profile());
+            Navigator.pushReplacement(context, Routes.main());
           },
         ),
         backgroundColor: backgroundColor1,
